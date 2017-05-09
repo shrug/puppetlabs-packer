@@ -83,11 +83,21 @@ class packer::vsphere::repos inherits packer::vsphere::params {
         gpgcheck => "1",
         gpgkey   => "file:///etc/pki/rpm-gpg/${gpgkey}"
       }
-      yumrepo { "localmirror-updates":
-        descr    => "localmirror-updates",
-        baseurl  => "${repo_mirror}/${loweros}-${::operatingsystemmajrelease}-${::architecture}/RPMS.updates",
-        gpgcheck => "1",
-        gpgkey   => "file:///etc/pki/rpm-gpg/${gpgkey}"
+      if $::operatingsystem == 'OracleLinux' {
+        yumrepo { "localmirror-all":
+          descr    => "localmirror-updates",
+          baseurl  => "${repo_mirror}/${loweros}-${::operatingsystemmajrelease}-${::architecture}/RPMS.all",
+          gpgcheck => "1",
+          gpgkey   => "file:///etc/pki/rpm-gpg/${gpgkey}"
+        }
+      }
+      else {
+        yumrepo { "localmirror-updates":
+          descr    => "localmirror-updates",
+          baseurl  => "${repo_mirror}/${loweros}-${::operatingsystemmajrelease}-${::architecture}/RPMS.updates",
+          gpgcheck => "1",
+          gpgkey   => "file:///etc/pki/rpm-gpg/${gpgkey}"
+        }
       }
 
       if $::operatingsystem == 'Fedora' {
